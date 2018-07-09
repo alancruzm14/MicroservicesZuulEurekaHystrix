@@ -1,0 +1,127 @@
+buildscript {
+	ext {
+		springBootVersion = '1.2.2.RELEASE'
+	}
+    repositories {
+        //mavenCentral()
+        //maven { url "http://repo.spring.io/plugins-release/" }
+        maven {
+			url "${artifactory_contextUrl}${artifactory_snapshot_bazd}"
+		}
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE')
+        classpath('com.palantir.gradle.docker:gradle-docker:0.13.0')
+        classpath("org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+apply plugin: "maven"
+
+
+sourceCompatibility = 1.7
+group ='com.bancoazteca.bdm'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    //mavenCentral()
+    //maven { url "https://repo.spring.io/milestone" }
+    //jcenter()
+    maven {
+		url "${artifactory_contextUrl}${artifactory_snapshot_bazd}"
+	}
+}
+
+jar {
+    baseName = 'biometricosOrquest'
+    version =  '1.0.0'
+}
+
+//docker {
+  //  dependsOn build
+   // name "${project.group}/${bootJar.baseName}"
+    //files bootJar.archivePath
+    //buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+//}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web'){
+	    exclude module: 'spring-boot-starter-logging'
+    	exclude module: "logback-classic"
+    	exclude module: "log4j-over-slf4j"
+	}
+	
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-jersey')
+	
+	
+	
+	compile "io.springfox:springfox-swagger2:2.9.0"
+	compile "io.springfox:springfox-swagger-ui:2.9.0"
+    
+    compile group: 'log4j', name: 'apache-log4j-extras', version: '1.1'
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.aspectj', name: 'aspectjtools' 
+    compile group: 'org.aspectj', name: 'aspectjrt' 
+    
+    //Dependencias Core    
+    
+    //compile group: 'com.bancoazteca.bdm', name: 'banca-digital-biometricos-entity', version: "${biometricos_version}"
+    
+    //Dependencias Eureka
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE")
+    
+}
+configurations.all {
+    //exclude group: "org.slf4j"
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+	resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"    
+    publish {
+        repository {
+        	 if (project.version.endsWith('-SNAPSHOT'))
+          		repoKey = "${artifactory_context_servicios}"
+        	else
+          		repoKey = "${artifactory_context_servicios}"
+          	
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+			ivy {
+		        ivyLayout = '[organization]/[module]/ivy-[revision].xml'
+		        artifactLayout = '[organization]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]'
+		        mavenCompatible = true //Convert any dots in an [organization] layout value to path separators, similar to Maven's groupId-to-path conversion. True if not specified
+		      }
+		}
+		defaults {
+			publishConfigs('archives')      
+			properties = ['qa.level': 'unspecifiedbasic', 'dev.team' : 'core']	
+		}
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }   
+}

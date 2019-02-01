@@ -2,7 +2,10 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: 10.51.58.240
+    hostname: localhost
+    #hostname: eureka.microserviciodemo.svc
+    #hostname: eureka-registry.testgitlab.svc
+    
   client:
     registerWithEureka: false
     fetchRegistry: false

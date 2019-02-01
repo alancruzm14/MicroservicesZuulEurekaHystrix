@@ -1,21 +1,9 @@
 server:
-  port: 0
+   port: ${appPort:8082}
 
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
-#    region: default
-    registryFetchIntervalSeconds: 5
-#    availabilityZones:
-#      default: ${APPLICATION_DOMAIN:${DOMAIN:defaultZone}}
-
-#stores:
-#  ribbon:
-#    ServerListRefreshInterval: 1000
-
-logging:
-  level:
-    se.callista: INFO
+    serviceUrl:
+      #defaultZone: http://eureka-registry.testgitlab.svc:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
+      

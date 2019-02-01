@@ -13,7 +13,7 @@ RUN chmod -R 777 gradlew
 RUN ls -l
 RUN ./gradlew build
 RUN pwd
-RUN cp build/libs/backend-1.0.0.jar /backend-1.0.0.jar
+RUN cp build/libs/biometricosOrquest-0.0.1.jar /biometricosOrquest-0.0.1.jar
 RUN ls -lrth
 RUN ls -lrth ../
 RUN ls -lrth ../../
@@ -21,4 +21,4 @@ RUN rm -f -R *
 RUN ls -lrth
 
 USER gradle
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/backend-1.0.0.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/biometricosOrquest-0.0.1.jar"]

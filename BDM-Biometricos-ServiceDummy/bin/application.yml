@@ -4,9 +4,11 @@ server:
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+    #metadataMap:
+     #instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
+    serviceUrl:
+      defaultZone: http://eureka.microserviciodemo.svc:8761/eureka/
 #    region: default
     registryFetchIntervalSeconds: 5
 #    availabilityZones:

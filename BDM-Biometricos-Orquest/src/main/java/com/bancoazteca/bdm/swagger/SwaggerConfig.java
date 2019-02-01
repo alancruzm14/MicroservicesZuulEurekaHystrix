@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import com.wordnik.swagger.models.Contact;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -19,7 +21,6 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
@@ -87,7 +88,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("Bank as a Service Documentation swagger")
 				.description("BAZ-API Swagger Documentation").termsOfServiceUrl("http://bancoazteca.com")
-				.contact(new Contact("Banco Azteca SA de CV", "bancoazteca.com", "bancoazteca@gmail.com"))
+				.contact("Banco Azteca SA de CV")
 				.license("Apache License Version 2.0").licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
 				.version("1.0").build();
 	}

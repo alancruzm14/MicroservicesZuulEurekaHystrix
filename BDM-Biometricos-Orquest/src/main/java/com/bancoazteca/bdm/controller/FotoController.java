@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bancoazteca.bdm.service.FotoService;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
 
 /**
  * @author ajcruzmi
@@ -40,5 +39,18 @@ public class FotoController {
 
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	
+	@ApiOperation(value = "Consulta persona por id")
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "Ops Not found"),
+			@ApiResponse(code = 200, message = "Sucess") })
+	@RequestMapping(value = "consultaFotoXPersona", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> consultaFotoXPersona() throws Exception {
+
+		String result = fotoService.consultaFotoXId("595d33882e1ba3da09a165eb");
+
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
 
 }

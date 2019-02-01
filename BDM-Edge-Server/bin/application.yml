@@ -1,6 +1,40 @@
-info:
-  component: Zuul Server
+    
+server:
+  port: ${PORT:8765}
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG
 
+eureka:
+  client:
+    serviceUrl:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka.microserviciodemo.svc:8761/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+ribbon: 
+     ConnectTimeout: 3000
+     ReadTimeout: 60000
+     
+zuul:
+  instance:
+    hostname: zuul.microserviciodemo.svc
+  routes:
+  #productcomposite - > nombre del MS que se define en el application de MS
+    bdmbiometricosorquest:
+      path: /bdmbiometricosorquest/**
+      serviceId: bdmbiometricosorquest
+#      stripPrefix: false
+    #bdmbiometricosdummy:
+     #  path: /WS_BiometricosDummy/**
+      # serviceId: bdmbiometricosdummy
 endpoints:
   restart:
     enabled: true
@@ -8,32 +42,3 @@ endpoints:
     enabled: true
   health:
     sensitive: false
-
-zuul:
-  ignoredServices: "*"
-  routes:
-  #productcomposite - > nombre del MS que se define en el application de MS
-    bdmbiometricosorquest:
-      path: /WS_BancaDigital/**
-      serviceId: bdmbiometricosorquest
-#      stripPrefix: false
-    bdmbiometricosdummy:
-       path: /WS_BiometricosDummy/**
-       serviceId: bdmbiometricosdummy
-
-#Puerto por el que levanta ZUUL
-server:
-  port: 8765
-
-logging:
-  level:
-    ROOT: INFO
-    org.springframework.web: INFO
-    
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://10.51.58.240:8761/eureka/
-  instance:
-    hostname: 10.51.58.240
-    nonSecurePort: 8099
